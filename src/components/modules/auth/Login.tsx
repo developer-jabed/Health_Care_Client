@@ -25,10 +25,9 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { useRouter } from "next/navigation";
 import loginUser from "@/utility/login";
+import { useRouter } from "next/navigation";
 import checkAuthStatus from "@/utility/auth";
-
 
 const loginSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }),
