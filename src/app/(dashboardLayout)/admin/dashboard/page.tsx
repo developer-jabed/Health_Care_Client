@@ -1,12 +1,9 @@
-import DashboardComponent from "@/components/modules/Dashboard/Dashboard";
+import React from 'react'
 
-
-const Dashboard = () => {
+export default function adminPage() {
     return (
-        <>
-        <DashboardComponent />
-        </>
-    );
-};
-
-export default Dashboard;
+        <div>
+            <h1>admin dashboard page</h1>
+        </div>
+    )
+}
