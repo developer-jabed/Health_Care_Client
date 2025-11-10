@@ -1,17 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-
-import { useActionState } from "react";
-
-import { registerPatient } from "@/service/auth/register-patient";
+import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { registerPatient } from "@/service/auth/register-patient";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 const RegisterForm = () => {
   const [state, formAction, isPending] = useActionState(registerPatient, null);
-  console.log(state, "state");
 
   const getFieldError = (fieldName: string) => {
     if (state && state.errors) {
@@ -25,6 +23,12 @@ const RegisterForm = () => {
       return null;
     }
   };
+
+  useEffect(() => {
+    if (state && !state.success && state.message) {
+      toast.error(state.message);
+    }
+  }, [state]);
   return (
     <form action={formAction}>
       <FieldGroup>
