@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
-export default function adminLayout() {
-    return (
-        <div>
-            <h1>admin Layout</h1>
-        </div>
-    )
-}
+const AdminDashboardLayout = ({ children }: { children: React.ReactNode }) => {
+  return <div>{children}</div>;
+};
+
+export default AdminDashboardLayout;
