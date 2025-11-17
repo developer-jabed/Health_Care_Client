@@ -5,6 +5,8 @@ import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { IDoctor } from "@/types/doctor.interface";
 import { createDoctorZodSchema, updateDoctorZodSchema } from "@/zod/doctors.validation";
+import { getSpecialities } from "./specialitiesManagment";
+import { NextResponse } from "next/server";
 
 export async function createDoctor(_prevState: any, formData: FormData) {
     try {
@@ -156,4 +158,11 @@ export async function deleteDoctor(id: string) {
             message: `${process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'}`
         };
     }
+}
+
+
+
+export async function GET() {
+  const data = await getSpecialities();
+  return NextResponse.json(data);
 }
