@@ -108,19 +108,19 @@ export const adminNavItems: NavSection[] = [
         items: [
             {
                 title: "Admins",
-                href: "/admin/dashboard/admins-management",
+                href: "/admin/dashboard/admins-managment",
                 icon: "Shield", // ✅ String
                 roles: ["ADMIN"],
             },
             {
                 title: "Doctors",
-                href: "/admin/dashboard/doctors-management",
+                href: "/admin/dashboard/doctors-managment",
                 icon: "Stethoscope", // ✅ String
                 roles: ["ADMIN"],
             },
             {
                 title: "Patients",
-                href: "/admin/dashboard/patients-management",
+                href: "/admin/dashboard/patients-managment",
                 icon: "Users", // ✅ String
                 roles: ["ADMIN"],
             },
@@ -131,13 +131,13 @@ export const adminNavItems: NavSection[] = [
         items: [
             {
                 title: "Appointments",
-                href: "/admin/dashboard/appointments-management",
+                href: "/admin/dashboard/appointments-managment",
                 icon: "Calendar", // ✅ String
                 roles: ["ADMIN"],
             },
             {
                 title: "Schedules",
-                href: "/admin/dashboard/schedules-management",
+                href: "/admin/dashboard/schedules-managment",
                 icon: "Clock", // ✅ String
                 roles: ["ADMIN"],
             },
