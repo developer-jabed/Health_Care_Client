@@ -9,7 +9,6 @@ import { createSpecialityZodSchema } from "@/zod/specialities.validation";
 
 
 
-
 export async function createSpeciality(_prevState: any, formData: FormData) {
     try {
         const payload = {

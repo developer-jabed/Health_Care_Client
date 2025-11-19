@@ -1,9 +1,5 @@
 import React from 'react'
 
-export default function patientLayout() {
-  return (
-    <div>
-      <h1>patient layout</h1>
-    </div>
-  )
+export default function patientLayout({ children }: { children: React.ReactNode }) {
+  return  <div>{children}</div>
 }

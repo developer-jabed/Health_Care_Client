@@ -21,6 +21,7 @@ interface UserDropdownProps {
 }
 
 const UserDropdown = ({ userInfo }: UserDropdownProps) => {
+
   const handleLogout = async () => {
     await logoutUser();
   };
@@ -35,6 +36,7 @@ const UserDropdown = ({ userInfo }: UserDropdownProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>
+
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium">{userInfo.name}</p>
             <p className="text-xs text-muted-foreground">{userInfo.email}</p>
