@@ -2,25 +2,24 @@
 
 import DeleteConfirmationDialog from "@/components/shared/DeleteConfirmationDialog";
 import ManagementTable from "@/components/shared/ManagementTable";
-
-import { ISchedule } from "@/types/schedule.interface";
+import { IDoctorSchedule } from "@/types/schedule.interface";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { schedulesColumns } from "./ScheduleColum";
-import { deleteSchedule } from "@/service/admin/schedulesManagement";
+import { myScheduleColumns } from "./myScheduleColumns";
+import { deleteDoctorOwnSchedule } from "@/service/doctor/doctorScedule.services";
 
-
-interface SchedulesTableProps {
-  schedules: ISchedule[];
+interface MySchedulesTableProps {
+  schedules: IDoctorSchedule[];
 }
 
-const SchedulesTable = ({ schedules }: SchedulesTableProps) => {
+export default function MySchedulesTable({
+  schedules = [],
+}: MySchedulesTableProps) {
   const router = useRouter();
   const [, startTransition] = useTransition();
-  const [deletingSchedule, setDeletingSchedule] = useState<ISchedule | null>(
-    null
-  );
+  const [deletingSchedule, setDeletingSchedule] =
+    useState<IDoctorSchedule | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleRefresh = () => {
@@ -29,15 +28,20 @@ const SchedulesTable = ({ schedules }: SchedulesTableProps) => {
     });
   };
 
-  const handleDelete = (schedule: ISchedule) => {
-    setDeletingSchedule(schedule);
+  const handleDelete = (schedule: IDoctorSchedule) => {
+    // Only allow deletion of unbooked schedules
+    if (!schedule.isBooked) {
+      setDeletingSchedule(schedule);
+    } else {
+      toast.error("Cannot delete booked schedule");
+    }
   };
 
   const confirmDelete = async () => {
     if (!deletingSchedule) return;
 
     setIsDeleting(true);
-    const result = await deleteSchedule(deletingSchedule.id!);
+    const result = await deleteDoctorOwnSchedule(deletingSchedule.scheduleId);
     setIsDeleting(false);
 
     if (result.success) {
@@ -53,10 +57,10 @@ const SchedulesTable = ({ schedules }: SchedulesTableProps) => {
     <>
       <ManagementTable
         data={schedules}
-        columns={schedulesColumns}
+        columns={myScheduleColumns}
         onDelete={handleDelete}
-        getRowKey={(schedule) => schedule.id!}
-        emptyMessage="No schedules found"
+        getRowKey={(schedule) => schedule.scheduleId}
+        emptyMessage="No schedules found. Try adjusting your filters or book new schedules."
       />
 
       {/* Delete Confirmation Dialog */}
@@ -65,11 +69,9 @@ const SchedulesTable = ({ schedules }: SchedulesTableProps) => {
         onOpenChange={(open) => !open && setDeletingSchedule(null)}
         onConfirm={confirmDelete}
         title="Delete Schedule"
-        description={`Are you sure you want to delete this schedule? This action cannot be undone.`}
+        description="Are you sure you want to delete this schedule slot? This action cannot be undone."
         isDeleting={isDeleting}
       />
     </>
   );
-};
-
-export default SchedulesTable;
+}
