@@ -6,7 +6,7 @@ import Image from "next/image";
 
 interface UserInfoCellProps {
   name: string;
-  email: string;
+  email?: string;
   photo?: string | null;
 }
 
@@ -24,7 +24,7 @@ export function UserInfoCell({ name, email, photo }: UserInfoCellProps) {
       </Avatar>
       <div>
         <p className="font-medium">{name}</p>
-        <p className="text-sm text-muted-foreground">{email}</p>
+        <p className="text-sm text-muted-foreground">{email ?? "N/A"}</p>
       </div>
     </div>
   );

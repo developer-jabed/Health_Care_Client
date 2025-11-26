@@ -16,9 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSpecialtySelection } from "@/hooks/specialtyHooks/useSpecialtySelection";
-
 import { IDoctor } from "@/types/doctor.interface";
-
 import Image from "next/image";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
