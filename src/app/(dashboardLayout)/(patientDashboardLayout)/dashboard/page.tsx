@@ -1,9 +1,10 @@
-import React from 'react'
+import { DashboardMetaViewer } from "@/components/modules/MetaData/MetaData";
 
-export default function patientPage() {
+export default function DashboardPage() {
   return (
     <div>
-      <h1>patient page</h1>
+      <h1>Dashboard</h1>
+      <DashboardMetaViewer />
     </div>
-  )
+  );
 }
