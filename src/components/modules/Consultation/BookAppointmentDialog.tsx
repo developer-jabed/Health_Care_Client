@@ -28,6 +28,7 @@ export default function BookAppointmentDialog({
   onClose,
 }: BookAppointmentDialogProps) {
   const doctorSchedules = doctor.doctorSchedules || [];
+  // console.log("doctorSchedule: ", doctor)
   const [selectedSchedule, setSelectedSchedule] =
     useState<IDoctorSchedule | null>(null);
 

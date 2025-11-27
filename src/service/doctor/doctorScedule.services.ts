@@ -5,8 +5,9 @@ import { serverFetch } from "@/lib/server-fetch";
 export async function getDoctorOwnSchedules(queryString?: string) {
     try {
         // const response = await serverFetch.get(`/doctor-schedule/my-schedule${queryString ? `?${queryString}` : ""}`);
-        const response = await serverFetch.get(`/doctor-schedule${queryString ? `?${queryString}` : ""}`);
+        const response = await serverFetch.get(`/doctor-schedule${queryString ? `?${queryString}` : ""}`)
         const result = await response.json();
+        console.log("SCHEDULE: ",result)
         return {
             success: result.success,
             data: Array.isArray(result.data) ? result.data : [],
