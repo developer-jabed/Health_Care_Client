@@ -1,10 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star } from "lucide-react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Star, Stethoscope } from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 import cardioDoc from "../../../assets/images/doctor-cardiologist .jpg";
 import neurolDoc from "../../../assets/images/doctor-neurologist.jpg";
@@ -16,42 +18,66 @@ const doctors = [
   { name: "Dr. Robert Fox", specialty: "Orthopedic", rating: 4.9, reviews: 32, image: orthoDoc },
 ];
 
-const DoctorCard = ({ doctor }: { doctor: typeof doctors[0] }) => {
+const DoctorCard = ({ doctor }: { doctor: (typeof doctors)[0] }) => {
   return (
-    <motion.div whileHover={{ y: -8, scale: 1.03 }} transition={{ type: "spring", stiffness: 200, damping: 15 }}>
-      <Card className="text-center overflow-hidden rounded-2xl border border-blue-100 dark:border-gray-700 shadow-lg hover:shadow-2xl bg-white/90 dark:bg-gray-800/70 backdrop-blur transition-all duration-300">
-        <CardHeader className="relative bg-gradient-to-r from-blue-100 via-indigo-50 to-blue-100 dark:from-gray-700 dark:via-gray-800 dark:to-gray-700 p-6">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/70 dark:to-gray-900/70"></div>
-          <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.5 }} className="relative z-10">
+    <motion.div
+      whileHover={{ y: -10, scale: 1.04 }}
+      transition={{ type: "spring", stiffness: 220, damping: 16 }}
+      className="group relative"
+    >
+      {/* Glow Ring */}
+      <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-500 opacity-0 blur-xl transition group-hover:opacity-40" />
+
+      <Card className="relative overflow-hidden rounded-3xl border border-blue-100 dark:border-gray-700 bg-white/90 dark:bg-gray-800/80 backdrop-blur shadow-xl">
+        {/* Header */}
+        <CardHeader className="relative p-8 bg-gradient-to-br from-blue-100 via-indigo-50 to-blue-100 dark:from-gray-700 dark:via-gray-800 dark:to-gray-700">
+          {/* Specialty Badge */}
+          <div className="absolute top-4 right-4 flex items-center gap-1 rounded-full bg-white/90 dark:bg-gray-900 px-3 py-1 text-xs font-medium text-blue-600 dark:text-blue-400 shadow">
+            <Stethoscope size={12} />
+            {doctor.specialty}
+          </div>
+
+          {/* Doctor Image */}
+          <motion.div
+            initial={{ scale: 0.85, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="relative z-10 flex justify-center"
+          >
             <Image
               src={doctor.image}
               alt={doctor.name}
-              width={110}
-              height={110}
-              className="rounded-full border-4 border-white dark:border-gray-700 shadow-lg mx-auto object-cover"
+              width={120}
+              height={120}
+              className="rounded-full border-4 border-white dark:border-gray-700 shadow-lg object-cover"
             />
           </motion.div>
         </CardHeader>
 
-        <CardContent className="p-6">
-          <CardTitle className="text-xl font-semibold text-gray-800 dark:text-gray-100">{doctor.name}</CardTitle>
-          <p className="text-blue-600 dark:text-blue-400 font-medium mt-1">{doctor.specialty}</p>
+        {/* Content */}
+        <CardContent className="p-6 text-center">
+          <CardTitle className="text-xl font-semibold text-gray-800 dark:text-gray-100">
+            {doctor.name}
+          </CardTitle>
 
-          <div className="flex items-center justify-center my-3 text-sm">
-            <Star className="text-yellow-400 fill-current" size={18} />
-            <span className="ml-2 font-semibold text-gray-800 dark:text-gray-100">{doctor.rating}</span>
-            <span className="ml-1 text-gray-500 dark:text-gray-400">({doctor.reviews} reviews)</span>
+          {/* Rating */}
+          <div className="flex items-center justify-center gap-2 mt-3 text-sm">
+            <Star className="text-yellow-400 fill-yellow-400" size={18} />
+            <span className="font-semibold text-gray-800 dark:text-gray-100">
+              {doctor.rating}
+            </span>
+            <span className="text-gray-500 dark:text-gray-400">
+              ({doctor.reviews} reviews)
+            </span>
+          </div>
+
+          {/* Hover CTA */}
+          <div className="mt-6 opacity-0 translate-y-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+            <div className="inline-flex items-center gap-2 rounded-full bg-blue-600/10 dark:bg-blue-400/10 px-4 py-2 text-sm text-blue-600 dark:text-blue-400">
+              ✨ AI Recommended Specialist
+            </div>
           </div>
         </CardContent>
-
-        <CardFooter className="flex gap-3 justify-center p-4 pt-0">
-          <Button variant="outline" className="border-blue-300 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900 hover:text-blue-700 transition-all duration-300">
-            View Profile
-          </Button>
-          <Button className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white dark:from-blue-600 dark:to-indigo-600 shadow-md hover:shadow-lg transition-all duration-300">
-            Book Now
-          </Button>
-        </CardFooter>
       </Card>
     </motion.div>
   );
@@ -59,30 +85,54 @@ const DoctorCard = ({ doctor }: { doctor: typeof doctors[0] }) => {
 
 const TopRatedDoctors = () => {
   return (
-    <section className="relative bg-gradient-to-b from-blue-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-24 overflow-hidden transition-colors duration-500">
-      {/* Subtle floating gradient orbs */}
-      <div className="absolute top-0 left-0 w-64 h-64 bg-blue-200/30 dark:bg-blue-700/20 blur-3xl rounded-full -z-10 animate-pulse"></div>
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-indigo-200/30 dark:bg-indigo-700/20 blur-3xl rounded-full -z-10 animate-pulse"></div>
+    <section className="relative bg-gradient-to-b from-blue-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-24 overflow-hidden">
+      {/* Floating Orbs */}
+      <div className="absolute top-0 left-0 w-72 h-72 bg-blue-200/30 dark:bg-blue-700/20 blur-3xl rounded-full animate-pulse -z-10" />
+      <div className="absolute bottom-0 right-0 w-72 h-72 bg-indigo-200/30 dark:bg-indigo-700/20 blur-3xl rounded-full animate-pulse -z-10" />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <motion.div initial={{ opacity: 0, y: -30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center max-w-2xl mx-auto">
+      <div className="container mx-auto px-4 relative">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-2xl mx-auto"
+        >
           <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-100">
             Our <span className="text-blue-600 dark:text-blue-400">Top Rated</span> Doctors
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mt-4">
-            Access highly qualified medical specialists ready to provide world-class healthcare tailored to your needs.
+            Hand-picked specialists trusted by thousands of patients and powered by AI recommendations.
           </p>
         </motion.div>
 
-        <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-14" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.8 }}>
+        {/* Cards */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-16"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+        >
           {doctors.map((doctor, index) => (
             <DoctorCard key={index} doctor={doctor} />
           ))}
         </motion.div>
 
-        <motion.div className="text-center mt-14" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.4, duration: 0.6 }}>
-          <Button size="lg" className="bg-gradient-to-r from-blue-500 to-indigo-500 dark:from-blue-600 dark:to-indigo-600 text-white shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
-            View All Doctors
+        {/* View All */}
+        <motion.div
+          className="text-center mt-16"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+        >
+          <Button
+            asChild
+            size="lg"
+            className="rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 dark:from-blue-600 dark:to-indigo-600 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+          >
+            <Link href="/consultation">
+              View All Doctors →
+            </Link>
           </Button>
         </motion.div>
       </div>

@@ -1,45 +1,25 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { getPaymentStatus } from "@/service/payment/payment.service";
+import { revalidate } from "@/lib/revalidate";
 import { CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface PaymentSuccessContentProps {
-  appointmentId: string;
-}
-
-const PaymentSuccessContent: React.FC<PaymentSuccessContentProps> = ({ appointmentId }) => {
+const PaymentSuccessContent = () => {
   const router = useRouter();
   const [countdown, setCountdown] = useState(5);
-  const [isPaid, setIsPaid] = useState(false);
-  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    const checkPayment = async () => {
-      try {
-        const statusRes = await getPaymentStatus(appointmentId);
-        if (statusRes?.data?.status === "PAID") {
-          setIsPaid(true);
-          setChecking(false);
-        } else {
-          // Retry after delay if not paid yet
-          setTimeout(checkPayment, 2000);
-        }
-      } catch (err) {
-        console.error("Error checking payment status:", err);
-        setTimeout(checkPayment, 2000);
-      }
-    };
+    // Get return URL from session storage only on client
+    revalidate("my-appointments");
+    const storedUrl =
+      sessionStorage.getItem("paymentReturnUrl") ||
+      "/dashboard/my-appointments";
+    sessionStorage.removeItem("paymentReturnUrl");
 
-    checkPayment();
-  }, [appointmentId]);
-
-  useEffect(() => {
-    if (!isPaid) return;
-
-    // Start countdown once payment is confirmed
+    // Start countdown
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -50,18 +30,23 @@ const PaymentSuccessContent: React.FC<PaymentSuccessContentProps> = ({ appointme
       });
     }, 1000);
 
+    // Redirect after countdown
     const redirectTimer = setTimeout(() => {
-      router.push("/dashboard/my-appointment"); // Or use sessionStorage return URL
+      router.push(storedUrl);
     }, 5000);
 
     return () => {
       clearInterval(timer);
       clearTimeout(redirectTimer);
     };
-  }, [isPaid, router]);
+  }, [router]);
 
   const handleManualRedirect = () => {
-    router.push("/dashboard/my-appointment");
+    const storedUrl =
+      sessionStorage.getItem("paymentReturnUrl") ||
+      "/dashboard/my-appointments";
+    sessionStorage.removeItem("paymentReturnUrl");
+    router.push(storedUrl);
   };
 
   return (
@@ -69,6 +54,7 @@ const PaymentSuccessContent: React.FC<PaymentSuccessContentProps> = ({ appointme
       <Card className="max-w-md w-full border-green-200 shadow-lg">
         <CardContent className="pt-8 pb-6">
           <div className="text-center space-y-6">
+            {/* Success Icon */}
             <div className="flex justify-center">
               <div className="relative">
                 <div className="absolute inset-0 bg-green-400 rounded-full blur-xl opacity-50 animate-pulse"></div>
@@ -78,31 +64,30 @@ const PaymentSuccessContent: React.FC<PaymentSuccessContentProps> = ({ appointme
               </div>
             </div>
 
+            {/* Success Message */}
             <div className="space-y-2">
               <h1 className="text-3xl font-bold text-green-900">
-                {checking ? "Processing Payment..." : "Payment Successful!"}
+                Payment Successful!
               </h1>
               <p className="text-green-700">
-                {checking
-                  ? "Please wait while we confirm your payment."
-                  : "Your appointment has been confirmed and payment received."}
+                Your appointment has been confirmed and payment received.
               </p>
             </div>
 
-            {isPaid && (
-              <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-                <p className="text-sm text-green-800">
-                  A confirmation email has been sent to your registered email with appointment details.
-                </p>
-              </div>
-            )}
+            {/* Details */}
+            <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+              <p className="text-sm text-green-800">
+                A confirmation email has been sent to your registered email
+                address with appointment details.
+              </p>
+            </div>
 
-            {isPaid && (
-              <div className="text-sm text-green-600">
-                Redirecting to your appointments in {countdown} seconds...
-              </div>
-            )}
+            {/* Countdown */}
+            <div className="text-sm text-green-600">
+              Redirecting to your appointments in {countdown} seconds...
+            </div>
 
+            {/* Action Button */}
             <Button
               onClick={handleManualRedirect}
               className="w-full bg-green-600 hover:bg-green-700"

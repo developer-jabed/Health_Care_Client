@@ -9,8 +9,11 @@ import { getSpecialities } from "@/service/admin/specialitiesManagment";
 
 import { Suspense } from "react";
 
+export const dynamic = "force-dynamic";
+
 // ISR: Revalidate every 10 minutes for doctor listings
 export const revalidate = 600;
+
 
 const ConsultationPage = async ({
   searchParams,
@@ -28,6 +31,8 @@ const ConsultationPage = async ({
 
   const doctors = doctorsResponse?.data || [];
   const specialties = specialtiesResponse?.data || [];
+
+  
 
   return (
     <div className="container mx-auto px-4 py-8">

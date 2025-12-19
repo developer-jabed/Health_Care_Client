@@ -12,7 +12,7 @@ async function AdminDashboardContent() {
   const data: IAdminDashboardMeta = result.data;
 
 
-  console.log(data)
+
 
   const totalRevenue = data.totalRevenue?._sum?.amount || 0;
 
