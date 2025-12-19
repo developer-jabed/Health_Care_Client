@@ -395,6 +395,7 @@ const AppointmentDetails = ({ appointment }: AppointmentDetailProps) => {
       {/* Review Dialog */}
       {canReview && (
         <ReviewDialog
+          doctorId={appointment.doctor?.id || ""}
           isOpen={showReviewDialog}
           onClose={() => setShowReviewDialog(false)}
           appointmentId={appointment.id}

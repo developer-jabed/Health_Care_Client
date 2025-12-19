@@ -21,7 +21,6 @@ export const myScheduleColumns: Column<IDoctorSchedule>[] = [
           format(new Date(schedule.schedule.startDateTime), "MMM d, yyyy")}
       </span>
     ),
-    sortKey: "schedule.startDateTime",
   },
   {
     header: "Time Slot",

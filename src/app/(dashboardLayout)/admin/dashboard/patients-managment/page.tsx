@@ -7,6 +7,7 @@ import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { queryStringFormatter } from "@/lib/formatters";
 import { getPatients } from "@/service/admin/patientsManagement";
 import { Suspense } from "react";
+export const dynamic = "force-dynamic";
 
 const AdminPatientsManagementPage = async ({
   searchParams,

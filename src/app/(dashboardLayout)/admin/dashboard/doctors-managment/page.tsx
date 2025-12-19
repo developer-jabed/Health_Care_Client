@@ -8,6 +8,7 @@ import { queryStringFormatter } from "@/lib/formatters";
 import { getDoctors } from "@/service/admin/doctorManagement";
 import { getSpecialities } from "@/service/admin/specialitiesManagment";
 import { Suspense } from "react";
+export const dynamic = "force-dynamic";
 
 const AdminDoctorsManagementPage = async ({
   searchParams,

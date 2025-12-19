@@ -8,6 +8,7 @@ import { Column } from "@/components/shared/ManagementTable";
 import { IDoctor } from "@/types/doctor.interface";
 import { Star } from "lucide-react";
 
+
 export const doctorsColumns: Column<IDoctor>[] = [
   {
     header: "Doctor",

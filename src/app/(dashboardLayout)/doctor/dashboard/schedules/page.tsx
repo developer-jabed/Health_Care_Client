@@ -6,6 +6,7 @@ import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { queryStringFormatter } from "@/lib/formatters";
 import { getAvailableSchedules, getDoctorOwnSchedules } from "@/service/doctor/doctorScedule.services";
 import { Suspense } from "react";
+export const dynamic = "force-dynamic";
 
 interface DoctorMySchedulesPageProps {
   searchParams: Promise<{

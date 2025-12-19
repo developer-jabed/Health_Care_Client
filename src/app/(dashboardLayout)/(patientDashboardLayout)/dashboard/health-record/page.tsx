@@ -1,11 +1,12 @@
-"use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity, FileText, Heart, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 
 // Dynamic SSR - authenticated page
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"; // ✅ correct
+
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
