@@ -1,102 +1,66 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { AlertCircle, ArrowLeft, Home } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import gsap from "gsap";
 
-// Generate star positions outside the component render
-const stars = Array.from({ length: 20 }).map(() => ({
-    top: Math.random() * 100,
-    left: Math.random() * 100,
-    delay: Math.random() * 2,
-}));
+export default function NotFound() {
+  const router = useRouter();
 
-const NotFound = () => {
-    const router = useRouter();
-    const titleRef = useRef<HTMLHeadingElement>(null);
-    const subtitleRef = useRef<HTMLHeadingElement>(null);
-    const buttonRef = useRef<HTMLButtonElement>(null);
-    const orbRef1 = useRef<HTMLDivElement>(null);
-    const orbRef2 = useRef<HTMLDivElement>(null);
+  return (
+    <>
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-b from-background to-muted/20">
+        <div className="container flex flex-col items-center justify-center gap-8 px-4 text-center">
+          <div className="scale-in">
+            <div className="relative">
+              {/* Animated Circle */}
+              <div className="absolute inset-0 rounded-full bg-destructive/10 pulse-scale" />
 
-    useEffect(() => {
-        gsap.fromTo(
-            titleRef.current,
-            { opacity: 0, y: -50, scale: 0.8 },
-            { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power3.out" }
-        );
-
-        gsap.fromTo(
-            subtitleRef.current,
-            { opacity: 0, y: 50, scale: 0.8 },
-            { opacity: 1, y: 0, scale: 1, duration: 1, delay: 0.3, ease: "power3.out" }
-        );
-
-        gsap.fromTo(
-            buttonRef.current,
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 1, delay: 0.6, ease: "back.out(1.7)" }
-        );
-
-        gsap.to([orbRef1.current, orbRef2.current], {
-            y: 20,
-            repeat: -1,
-            yoyo: true,
-            duration: 3,
-            ease: "sine.inOut",
-        });
-    }, []);
-
-    return (
-        <div className="relative flex flex-col items-center justify-center h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 overflow-hidden">
-            <div
-                ref={orbRef1}
-                className="absolute top-10 left-10 w-32 h-32 bg-pink-200/40 dark:bg-pink-700/30 rounded-full blur-3xl animate-spin-slow"
-            />
-            <div
-                ref={orbRef2}
-                className="absolute bottom-20 right-20 w-48 h-48 bg-blue-200/40 dark:bg-blue-700/30 rounded-full blur-3xl animate-spin-slow"
-            />
-
-            <div className="relative z-10 text-center px-4">
-                <h1
-                    ref={titleRef}
-                    className="text-6xl md:text-7xl font-bold text-gray-800 dark:text-gray-100 mb-4"
-                >
-                    404
+              {/* 404 Text */}
+              <div className="relative z-10 flex h-48 w-48 items-center justify-center">
+                <h1 className="text-8xl font-bold text-primary fade-up-delay-1">
+                  404
                 </h1>
-                <h2
-                    ref={subtitleRef}
-                    className="text-2xl md:text-3xl text-gray-600 dark:text-gray-300 mb-8"
-                >
-                    Oops! Page Not Found
-                </h2>
+              </div>
 
-                <button
-                    ref={buttonRef}
-                    onClick={() => router.push("/")}
-                    className="rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-8 py-4 font-semibold shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300"
-                >
-                    Back to Home
-                </button>
+              {/* Floating Icon */}
+              <div className="absolute -top-4 -right-4 rounded-full bg-destructive p-3 text-destructive-foreground shadow-lg float-icon">
+                <AlertCircle className="h-8 w-8" />
+              </div>
             </div>
-
-            {/* Stars */}
-            <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-                {stars.map((star, i) => (
-                    <div
-                        key={i}
-                        className="absolute bg-yellow-300 dark:bg-yellow-400 w-2 h-2 rounded-full animate-pulse"
-                        style={{
-                            top: `${star.top}%`,
-                            left: `${star.left}%`,
-                            animationDelay: `${star.delay}s`,
-                        }}
-                    />
-                ))}
-            </div>
+          </div>{" "}
+          <div className="space-y-4 fade-up-delay-2">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              Page Not Found
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-md">
+              Oops! The page you&apos;re looking for doesn&apos;t exist. It
+              might have been moved or deleted.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 fade-up-delay-3">
+            <Button
+              size="lg"
+              onClick={() => router.back()}
+              variant="outline"
+              className="gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Go Back
+            </Button>
+            <Button size="lg" asChild className="gap-2">
+              <Link href="/">
+                <Home className="h-4 w-4" />
+                Back to Home
+              </Link>
+            </Button>
+          </div>
+          {/* Decorative Elements */}
+          <div className="absolute top-1/4 left-1/4 h-64 w-64 rounded-full bg-primary/5 blur-3xl glow-1" />
+          <div className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-blue-500/5 blur-3xl glow-2" />
         </div>
-    );
-};
-
-export default NotFound;
+      </div>
+    </>
+  );
+}

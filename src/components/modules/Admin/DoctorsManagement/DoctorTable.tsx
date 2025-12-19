@@ -11,6 +11,7 @@ import { softDeleteDoctor } from "@/service/admin/doctorManagement";
 import { doctorsColumns } from "./DoctorsColum";
 import DoctorViewDetailDialog from "./DoctorViewDialoag";
 
+
 interface DoctorsTableProps {
   doctors: IDoctor[];
   specialities: ISpeciality[];
