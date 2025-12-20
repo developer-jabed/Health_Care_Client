@@ -9,6 +9,8 @@ import { getPatients } from "@/service/admin/patientsManagement";
 import { Suspense } from "react";
 export const dynamic = "force-dynamic";
 
+// dynamic page 
+
 const AdminPatientsManagementPage = async ({
   searchParams,
 }: {
