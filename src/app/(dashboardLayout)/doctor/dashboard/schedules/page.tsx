@@ -6,6 +6,7 @@ import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { queryStringFormatter } from "@/lib/formatters";
 import { getAvailableSchedules, getDoctorOwnSchedules } from "@/service/doctor/doctorScedule.services";
 import { Suspense } from "react";
+export const dynamic = "force-dynamic";
 
 interface DoctorMySchedulesPageProps {
   searchParams: Promise<{
@@ -24,10 +25,7 @@ const DoctorMySchedulesPage = async ({
   const myDoctorsScheduleResponse = await getDoctorOwnSchedules(queryString);
   const availableSchedulesResponse = await getAvailableSchedules();
 
-  console.log({
-    myDoctorsScheduleResponse,
-    availableSchedulesResponse,
-  });
+
 
   const schedules = myDoctorsScheduleResponse?.data || [];
   const meta = myDoctorsScheduleResponse?.meta;

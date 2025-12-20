@@ -1,28 +1,33 @@
-import { AppointmentBarChart } from "@/components/shared/AppointmentBarChart";
-import { AppointmentPieChart } from "@/components/shared/AppointmentPieChart";
-import { DashboardSkeleton } from "@/components/shared/DashboardSkeleton";
+
 import { StatsCard } from "@/components/shared/StatCard";
-import { getDashboardMetaData } from "@/service/meta/metaData.service";
+import { getDashboardMetaData } from "@/service/meta/dashboard.service";
 import { IAdminDashboardMeta } from "@/types/meta.interface";
 import { Suspense } from "react";
 
-async function AdminDashboardContent() {
+import { DashboardSkeleton } from "@/components/shared/DashboardSkeleton";
+import { DashboardCharts } from "@/components/modules/Admin/AdminDashboard/AdminDashboard";
+
+export const dynamic = "force-dynamic"; // forces SSR
+
+export default async function AdminDashboardPage() {
   const result = await getDashboardMetaData();
-
   const data: IAdminDashboardMeta = result.data;
-
-
-  console.log(data)
 
   const totalRevenue = data.totalRevenue?._sum?.amount || 0;
 
   return (
     <div className="space-y-6">
-      {/* Stats Cards Grid */}
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <p className="text-muted-foreground">
+          Overview of your healthcare system statistics
+        </p>
+      </div>
+
+      {/* Stats Cards */}
       <div
-        className={`grid gap-4 md:grid-cols-2 lg:grid-cols-3 ${
-          data.adminCount !== undefined ? "xl:grid-cols-6" : "xl:grid-cols-5"
-        }`}
+        className={`grid gap-4 md:grid-cols-2 lg:grid-cols-3 ${data.adminCount !== undefined ? "xl:grid-cols-6" : "xl:grid-cols-5"
+          }`}
       >
         <StatsCard
           title="Total Appointments"
@@ -70,30 +75,13 @@ async function AdminDashboardContent() {
         />
       </div>
 
-      {/* Charts Section */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <AppointmentBarChart data={data.barChartData} />
-        <AppointmentPieChart data={data.pieCharData} />
-      </div>
-    </div>
-  );
-}
-
-const AdminDashboardPage = () => {
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">
-          Overview of your healthcare system statistics
-        </p>
-      </div>
-
+      {/* Charts Section (Client Component) */}
       <Suspense fallback={<DashboardSkeleton />}>
-        <AdminDashboardContent />
+        <DashboardCharts
+          barData={data.barChartData}
+          pieData={data.pieCharData}
+        />
       </Suspense>
     </div>
   );
-};
-
-export default AdminDashboardPage;
+}

@@ -2,7 +2,7 @@ import DoctorProfileContent from "@/components/modules/DoctorDetails/DoctorProfi
 import DoctorReviews from "@/components/modules/DoctorDetails/DoctorReviews";
 import { getDoctorById } from "@/service/admin/doctorManagement";
 
-
+export const dynamic = "force-dynamic";
 const DoctorDetailPage = async ({
   params,
 }: {

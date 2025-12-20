@@ -1,4 +1,5 @@
 import LoginForm from "@/components/modules/auth/Login";
+export const dynamic = "force-dynamic";
 
 const LoginPage = async ({
   searchParams,

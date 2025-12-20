@@ -1,19 +1,20 @@
+// app/(dashboardLayout)/doctor/dashboard/page.tsx
 import { AppointmentPieChart } from "@/components/shared/AppointmentPieChart";
 import { DashboardSkeleton } from "@/components/shared/DashboardSkeleton";
 import { StatsCard } from "@/components/shared/StatCard";
-import { getDashboardMetaData } from "@/service/meta/metaData.service";
+import { getDashboardMetaData } from "@/service/meta/dashboard.service";
 import { IDoctorDashboardMeta } from "@/types/meta.interface";
 import { Suspense } from "react";
+
+export const dynamic = "force-dynamic"; // important: allows server-side cookies usage
+
 async function DoctorDashboardContent() {
   const result = await getDashboardMetaData();
-
   const data: IDoctorDashboardMeta = result.data;
-  // Safe access with fallback for revenue data
   const totalRevenue = data.totalRevenue?._sum?.amount || 0;
 
   return (
     <div className="space-y-6">
-      {/* Stats Cards Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           title="Total Appointments"
@@ -45,7 +46,6 @@ async function DoctorDashboardContent() {
         />
       </div>
 
-      {/* Appointment Status Chart */}
       <div className="grid gap-4">
         <AppointmentPieChart
           data={data.formattedAppointmentStatusDistribution}

@@ -52,7 +52,7 @@ export default function BookScheduleDialog({
     try {
       setLoadingSchedules(true);
       const response = await getAvailableSchedules();
-      console.log("response:", response);
+   
       setAvailableSchedules(response?.data || []);
     } catch (error) {
       console.error("Error loading schedules:", error);
@@ -119,7 +119,7 @@ export default function BookScheduleDialog({
 
   const groupedSchedules = groupSchedulesByDate();
 
-  console.log({ availableSchedules, groupedSchedules });
+
 
   return (
     <Dialog open={open} onOpenChange={onClose}>

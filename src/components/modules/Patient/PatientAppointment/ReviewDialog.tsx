@@ -22,6 +22,7 @@ interface ReviewDialogProps {
   onClose: () => void;
   appointmentId: string;
   doctorName: string;
+  doctorId: string;
 }
 
 export default function ReviewDialog({
@@ -29,6 +30,7 @@ export default function ReviewDialog({
   onClose,
   appointmentId,
   doctorName,
+  doctorId,
 }: ReviewDialogProps) {
   const router = useRouter();
   const [rating, setRating] = useState(0);
@@ -53,6 +55,7 @@ export default function ReviewDialog({
 
     try {
       const result = await createReview({
+        doctorId,
         appointmentId,
         rating,
         comment: comment.trim(),
@@ -108,11 +111,10 @@ export default function ReviewDialog({
                     className="focus:outline-none transition-transform hover:scale-110"
                   >
                     <Star
-                      className={`h-8 w-8 ${
-                        star <= (hoveredRating || rating)
+                      className={`h-8 w-8 ${star <= (hoveredRating || rating)
                           ? "fill-yellow-500 text-yellow-500"
                           : "text-gray-300"
-                      }`}
+                        }`}
                     />
                   </button>
                 ))}
@@ -122,12 +124,12 @@ export default function ReviewDialog({
                     {rating === 1
                       ? "Poor"
                       : rating === 2
-                      ? "Fair"
-                      : rating === 3
-                      ? "Good"
-                      : rating === 4
-                      ? "Very Good"
-                      : "Excellent"}
+                        ? "Fair"
+                        : rating === 3
+                          ? "Good"
+                          : rating === 4
+                            ? "Very Good"
+                            : "Excellent"}
                   </span>
                 )}
               </div>

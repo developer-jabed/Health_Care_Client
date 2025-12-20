@@ -3,6 +3,7 @@ import DoctorPrescriptionsTable from "@/components/modules/Doctor/DoctorPrescrip
 import { getMyAppointments } from "@/service/patient/appointment.service";
 import { IAppointment } from "@/types/appointments.interface";
 import { IPrescription } from "@/types/prescription.interface";
+export const dynamic = "force-dynamic";
 
 export default async function DoctorPrescriptionsPage() {
   // Get all doctor's appointments

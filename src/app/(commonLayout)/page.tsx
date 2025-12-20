@@ -5,6 +5,8 @@ import Testimonials from "@/components/modules/home/Testimonials";
 import TopRatedDoctors from "@/components/modules/home/TopRatedDoctors";
 import Head from "next/head";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <>

@@ -1,134 +1,143 @@
 "use client";
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Loader2, Key } from "lucide-react";
-import { useState, useTransition } from "react";
 import { changePassword } from "@/service/auth/auth.service";
 
-const ChangePasswordPage = () => {
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+import { CheckCircle, Eye, EyeOff, Loader2 } from "lucide-react";
+import { useActionState, useState } from "react";
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
-    setSuccess(null);
-
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const oldPassword = formData.get("oldPassword") as string;
-    const newPassword = formData.get("newPassword") as string;
-    const confirmPassword = formData.get("confirmPassword") as string;
-
-    if (newPassword !== confirmPassword) {
-      setError("New password and confirm password do not match");
-      return;
-    }
-
-    startTransition(async () => {
-      try {
-        const result = await changePassword({ oldPassword, newPassword });
-
-        if (result.success) {
-          setSuccess(result.message || "Password changed successfully!");
-          form.reset(); // ✅ safely reset the form
-        } else {
-          setError(result.message || "Failed to change password");
-        }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: any) {
-        console.error("Change password error:", err);
-        setError("Something went wrong. Try again!");
-      }
-    });
-  };
+const ChangePasswordForm = () => {
+  const [state, formAction, isPending] = useActionState(changePassword, null);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Change Password</h1>
-        <p className="text-muted-foreground mt-1">Update your account password</p>
-      </div>
+    <form action={formAction} className="space-y-6">
+      {state?.success && (
+        <Alert className="border-green-500 bg-green-50 text-green-900">
+          <CheckCircle className="h-4 w-4" />
+          <AlertDescription>{state.message}</AlertDescription>
+        </Alert>
+      )}
 
-      <form onSubmit={handleSubmit}>
-        <Card>
-          <CardHeader>
-            <CardTitle>Security</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {error && (
-              <div className="bg-destructive/10 text-destructive px-4 py-3 rounded-md text-sm">
-                {error}
-              </div>
+      {state?.success === false && (
+        <Alert variant="destructive">
+          <AlertDescription>{state.message}</AlertDescription>
+        </Alert>
+      )}
+
+      <Field>
+        <Label htmlFor="oldPassword">Current Password</Label>
+        <div className="relative">
+          <Input
+            id="oldPassword"
+            name="oldPassword"
+            type={showOldPassword ? "text" : "password"}
+            placeholder="Enter your current password"
+            defaultValue={state?.formData?.oldPassword || ""}
+            required
+            disabled={isPending}
+          />
+          <Button
+            variant="ghost"
+            onClick={() => setShowOldPassword(!showOldPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            tabIndex={-1}
+          >
+            {showOldPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
             )}
-            {success && (
-              <div className="bg-green-500/10 text-green-600 px-4 py-3 rounded-md text-sm">
-                {success}
-              </div>
+          </Button>
+        </div>
+        {state?.errors?.find((e) => e.field === "oldPassword") && (
+          <p className="text-sm text-red-500">
+            {state.errors.find((e) => e.field === "oldPassword")?.message}
+          </p>
+        )}
+      </Field>
+
+      <Field>
+        <Label htmlFor="newPassword">New Password</Label>
+        <div className="relative">
+          <Input
+            id="newPassword"
+            name="newPassword"
+            type={showNewPassword ? "text" : "password"}
+            placeholder="Enter your new password"
+            defaultValue={state?.formData?.newPassword || ""}
+            required
+            disabled={isPending}
+          />
+          <Button
+            variant="ghost"
+            onClick={() => setShowNewPassword(!showNewPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            tabIndex={-1}
+          >
+            {showNewPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
             )}
+          </Button>
+        </div>
+        {state?.errors?.find((e) => e.field === "newPassword") && (
+          <p className="text-sm text-red-500">
+            {state.errors.find((e) => e.field === "newPassword")?.message}
+          </p>
+        )}
+      </Field>
 
-            <div className="grid gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="oldPassword">Current Password</Label>
-                <Input
-                  type="password"
-                  id="oldPassword"
-                  name="oldPassword"
-                  placeholder="Enter current password"
-                  required
-                  disabled={isPending}
-                />
-              </div>
+      <Field>
+        <Label htmlFor="confirmPassword">Confirm New Password</Label>
+        <div className="relative">
+          <Input
+            id="confirmPassword"
+            name="confirmPassword"
+            type={showConfirmPassword ? "text" : "password"}
+            placeholder="Confirm your new password"
+            defaultValue={state?.formData?.confirmPassword || ""}
+            required
+            disabled={isPending}
+          />
+          <Button
+            variant="ghost"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            tabIndex={-1}
+          >
+            {showConfirmPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
+        {state?.errors?.find((e) => e.field === "confirmPassword") && (
+          <p className="text-sm text-red-500">
+            {state.errors.find((e) => e.field === "confirmPassword")?.message}
+          </p>
+        )}
+      </Field>
 
-              <div className="space-y-2">
-                <Label htmlFor="newPassword">New Password</Label>
-                <Input
-                  type="password"
-                  id="newPassword"
-                  name="newPassword"
-                  placeholder="Enter new password"
-                  required
-                  disabled={isPending}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                <Input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  placeholder="Confirm new password"
-                  required
-                  disabled={isPending}
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end pt-4">
-              <Button type="submit" disabled={isPending} className="flex items-center">
-                {isPending ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Updating...
-                  </>
-                ) : (
-                  <>
-                    <Key className="mr-2 h-4 w-4" />
-                    Change Password
-                  </>
-                )}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </form>
-    </div>
+      <Button type="submit" disabled={isPending} className="w-full">
+        {isPending ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Changing Password...
+          </>
+        ) : (
+          "Change Password"
+        )}
+      </Button>
+    </form>
   );
 };
 
-export default ChangePasswordPage;
+export default ChangePasswordForm;

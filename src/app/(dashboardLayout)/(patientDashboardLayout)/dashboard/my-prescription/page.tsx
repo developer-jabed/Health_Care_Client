@@ -1,6 +1,7 @@
 import PatientPrescriptionsList from "@/components/modules/Patient/PatientPrescription/PatientPrescriptionList";
 import { getMyPrescriptions } from "@/service/patient/prescription.service";
 import { IPrescription } from "@/types/prescription.interface";
+export const dynamic = "force-dynamic";
 
 export default async function MyPrescriptionsPage() {
   const response = await getMyPrescriptions();

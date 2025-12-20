@@ -1,9 +1,41 @@
-import React from 'react'
+import AppointmentsFilter from "@/components/modules/Admin/AppointmentsManagement/AppointmentsFilter";
+import AppointmentsTable from "@/components/modules/Admin/AppointmentsManagement/AppointmentsTable";
+import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
+import TablePagination from "@/components/shared/TablePagination";
+import { TableSkeleton } from "@/components/shared/TableSkeleton";
+import { queryStringFormatter } from "@/lib/formatters";
+import { getAppointments } from "@/service/admin/appoitmentsManagement";
+import { Suspense } from "react";
+export const dynamic = "force-dynamic";
 
-export default function appoinmentManagment() {
+const AppointmentsManagementPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) => {
+  const searchParamsObj = await searchParams;
+  const queryString = queryStringFormatter(searchParamsObj);
+  const response = await getAppointments(queryString);
+
   return (
-    <div>
-      <h1>Appointment managment</h1>
+    <div className="space-y-6">
+      <ManagementPageHeader
+        title="Appointments Management"
+        description="View and manage all appointments"
+      />
+
+      <AppointmentsFilter />
+
+      <Suspense fallback={<TableSkeleton columns={7} />}>
+        <AppointmentsTable appointments={response?.data || []} />
+      </Suspense>
+
+      <TablePagination
+        currentPage={response?.meta?.page || 1}
+        totalPages={response?.meta?.totalPage || 1}
+      />
     </div>
-  )
-}
+  );
+};
+
+export default AppointmentsManagementPage;

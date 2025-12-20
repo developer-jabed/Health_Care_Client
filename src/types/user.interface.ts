@@ -3,7 +3,6 @@ import { IAdmin } from "./admin.interface";
 import { IDoctor } from "./doctor.interface";
 import { IPatient } from "./patient.interface";
 
-
 export interface UserInfo {
     id: string;
     name: string;

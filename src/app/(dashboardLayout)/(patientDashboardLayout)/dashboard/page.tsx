@@ -1,7 +1,7 @@
 import { AppointmentPieChart } from "@/components/shared/AppointmentPieChart";
 import { DashboardSkeleton } from "@/components/shared/DashboardSkeleton";
 import { StatsCard } from "@/components/shared/StatCard";
-import { getDashboardMetaData } from "@/service/meta/metaData.service";
+import { getDashboardMetaData } from "@/service/meta/dashboard.service";
 import { IPatientDashboardMeta } from "@/types/meta.interface";
 import { Suspense } from "react";
 
